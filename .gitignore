@@ -1,0 +1,67 @@
+# Environment Configuration
+.env
+.env.local
+.env.backup
+
+# Recordings (large files, store separately)
+recordings/*.mka
+recordings/extracted_*/
+recordings/*.ready
+recordings/*.log
+
+# Keep recordings directory structure
+!recordings/.gitkeep
+
+# Docker volumes and state
+# Ignore generated config files
+config/*/config
+config/*/*.db
+config/*/*.sqlite
+config/*/data/
+config/**/*.log
+config/**/*.pid
+config/**/*.lock
+
+# But keep our template files
+!config/jvb/sip-communicator.properties
+!config/**/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Backup files
+*.backup
+*.bak
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Docker
+.docker/
+
+# Test files
+test-recordings/
+*.test
