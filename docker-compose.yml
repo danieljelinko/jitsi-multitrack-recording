@@ -11,8 +11,6 @@ services:
       - '${HTTPS_PORT:-8443}:443'
     volumes:
       - ./config/web:/config:Z
-      - ./config/web/interface_config.js:/usr/share/jitsi-meet/interface_config.js:ro
-      - ./config/web/config.js:/usr/share/jitsi-meet/config.js:ro
     environment:
       - ENABLE_AUTH=${ENABLE_AUTH:-0}
       - ENABLE_GUESTS=${ENABLE_GUESTS:-1}
@@ -43,7 +41,6 @@ services:
       - '5280'
     volumes:
       - ./config/prosody:/config:Z
-      - ./config/prosody/prosody.cfg.lua:/config/prosody.cfg.lua:ro
     environment:
       - AUTH_TYPE=${AUTH_TYPE:-internal}
       - ENABLE_AUTH=${ENABLE_AUTH:-0}
@@ -89,7 +86,10 @@ services:
 
   # Jicofo - Jitsi Conference Focus
   jicofo:
-    image: jitsi/jicofo:stable-9584
+    image: jicofo-multitrack:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.jicofo
     container_name: jitsi_jicofo
     restart: unless-stopped
     volumes:
@@ -113,7 +113,10 @@ services:
 
   # JVB - Jitsi Videobridge
   jvb:
-    image: jitsi/jvb:stable-9584
+    image: jvb-multitrack:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.jvb
     container_name: jitsi_jvb
     restart: unless-stopped
     ports:
@@ -121,7 +124,6 @@ services:
       - '${JVB_TCP_PORT:-4443}:4443/tcp'
     volumes:
       - ./config/jvb:/config:Z
-      - ./config/jvb/sip-communicator.properties:/config/sip-communicator.properties:ro
     environment:
       - DOCKER_HOST_ADDRESS=${DOCKER_HOST_ADDRESS:-}
       - XMPP_AUTH_DOMAIN=auth.${XMPP_DOMAIN:-meet.jitsi}
@@ -133,12 +135,15 @@ services:
       - JVB_PORT=${JVB_PORT:-10000}
       - JVB_TCP_HARVESTER_DISABLED=${JVB_TCP_HARVESTER_DISABLED:-false}
       - JVB_TCP_PORT=${JVB_TCP_PORT:-4443}
-      - JVB_STUN_SERVERS=${JVB_STUN_SERVERS:-meet-jit-si-turnrelay.jitsi.net:443}
+      - JVB_STUN_SERVERS=${JVB_STUN_SERVERS:-}
       - JVB_ENABLE_APIS=rest,colibri
       - ENABLE_COLIBRI_WEBSOCKET=1
       - JVB_WS_DOMAIN=${XMPP_DOMAIN:-meet.jitsi}
       - JVB_WS_SERVER_ID=${JVB_WS_SERVER_ID:-jvb}
       - TZ=${TZ:-UTC}
+      # NAT configuration (for localhost testing)
+      - NAT_HARVESTER_LOCAL_ADDRESS=${NAT_HARVESTER_LOCAL_ADDRESS:-}
+      - NAT_HARVESTER_PUBLIC_ADDRESS=${NAT_HARVESTER_PUBLIC_ADDRESS:-}
       # Multitrack recorder configuration
       - ENABLE_MULTITRACK_RECORDER=1
       - MULTITRACK_RECORDER_ENDPOINT=ws://recorder:8989/record
