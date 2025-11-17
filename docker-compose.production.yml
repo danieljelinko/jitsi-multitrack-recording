@@ -1,0 +1,23 @@
+version: '3.8'
+
+# Production Configuration
+# This compose file extends the base docker-compose.yml with production-specific settings
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+
+services:
+  web:
+    ports:
+      # In production, typically use standard ports
+      - '80:80'
+      - '443:443'
+    environment:
+      # Enable HTTPS in production
+      - DISABLE_HTTPS=0
+      - ENABLE_LETSENCRYPT=1
+      - ENABLE_HTTP_REDIRECT=1
+
+  jvb:
+    environment:
+      # In production, use STUN for NAT traversal
+      - JVB_STUN_SERVERS=meet-jit-si-turnrelay.jitsi.net:443
+      # DOCKER_HOST_ADDRESS should be set to your server's public IP in .env

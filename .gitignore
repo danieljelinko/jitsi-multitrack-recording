@@ -26,6 +26,9 @@ config/**/*.lock
 config/web/config.js
 config/web/interface_config.js
 config/web/keys/
+
+# But keep our custom configuration
+!config/web/custom-config.js
 config/prosody/prosody.cfg.lua
 config/prosody/certs/
 config/prosody/conf.d/

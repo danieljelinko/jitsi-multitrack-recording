@@ -11,12 +11,14 @@ services:
       - '${HTTPS_PORT:-8443}:443'
     volumes:
       - ./config/web:/config:Z
+      - ./config/web/custom-config.js:/usr/share/jitsi-meet/custom-config.js:ro
     environment:
       - ENABLE_AUTH=${ENABLE_AUTH:-0}
       - ENABLE_GUESTS=${ENABLE_GUESTS:-1}
       - ENABLE_LETSENCRYPT=${ENABLE_LETSENCRYPT:-0}
       - ENABLE_HTTP_REDIRECT=${ENABLE_HTTP_REDIRECT:-0}
-      - ENABLE_TRANSCRIPTIONS=${ENABLE_TRANSCRIPTIONS:-0}
+      - ENABLE_TRANSCRIPTIONS=1
+      - ENABLE_RECORDING=1
       - DISABLE_HTTPS=${DISABLE_HTTPS:-1}
       - JICOFO_AUTH_USER=focus
       - XMPP_DOMAIN=${XMPP_DOMAIN:-meet.jitsi}
@@ -97,9 +99,11 @@ services:
     environment:
       - AUTH_TYPE=${AUTH_TYPE:-internal}
       - ENABLE_AUTH=${ENABLE_AUTH:-0}
+      - ENABLE_RECORDING=${ENABLE_RECORDING:-0}
       - XMPP_DOMAIN=${XMPP_DOMAIN:-meet.jitsi}
       - XMPP_AUTH_DOMAIN=auth.${XMPP_DOMAIN:-meet.jitsi}
       - XMPP_INTERNAL_MUC_DOMAIN=internal-muc.${XMPP_DOMAIN:-meet.jitsi}
+      - XMPP_RECORDER_DOMAIN=recorder.${XMPP_DOMAIN:-meet.jitsi}
       - XMPP_SERVER=prosody
       - JICOFO_COMPONENT_SECRET=${JICOFO_COMPONENT_SECRET}
       - JICOFO_AUTH_USER=focus
@@ -152,7 +156,9 @@ services:
     depends_on:
       - prosody
 
-  # Multitrack Recorder
+  # Multitrack Recorder (Experimental - See MULTITRACK_STATUS.md)
+  # NOTE: This component exists but requires Jibri availability to function
+  # See MULTITRACK_STATUS.md for details on why this doesn't work standalone
   recorder:
     image: jitsi/jitsi-multitrack-recorder:latest
     container_name: jitsi_multitrack_recorder

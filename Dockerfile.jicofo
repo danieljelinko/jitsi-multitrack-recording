@@ -5,3 +5,14 @@ COPY docker/jicofo/jicofo.jar /usr/share/jicofo/jicofo.jar
 
 # Comment out the trusted-domains line that causes XmppStringprepException with empty strings
 RUN sed -i 's/^      trusted-domains/      # trusted-domains/g' /defaults/jicofo.conf
+
+# Add transcription configuration for multitrack recorder
+# The multitrack recorder uses the transcription infrastructure, NOT the recording infrastructure
+RUN echo '\n\
+jicofo {\n\
+  transcription {\n\
+    # WebSocket URL template for multitrack recorder\n\
+    # MEETING_ID will be replaced with the actual conference ID\n\
+    url-template = "ws://recorder:8989/record/MEETING_ID"\n\
+  }\n\
+}' >> /defaults/jicofo.conf

@@ -1,8 +1,20 @@
 # Jitsi Multitrack Recording Server
 
-A self-hosted Jitsi Meet server with multitrack audio recording capability. Each participant's audio is recorded as a separate track, eliminating the need for diarization in post-processing.
+**⚠️ STATUS: EXPERIMENTAL / NOT PRODUCTION-READY**
 
-## 🎯 Features
+**See [MULTITRACK_STATUS.md](MULTITRACK_STATUS.md) for full investigation findings.**
+
+This repository documents research into Jitsi's multitrack recording feature. After extensive configuration and testing, we concluded that the feature is not production-ready and requires Jibri availability to function.
+
+**For production recording needs, see the separate `jitsi-jibri-recording` repository.**
+
+---
+
+## What This Repository Contains
+
+A self-hosted Jitsi Meet server configured for multitrack audio recording research. Each participant's audio should theoretically be recorded as a separate track, but the feature is blocked by Jibri dependency.
+
+## 🎯 Theoretical Features
 
 - **Multitrack Audio Recording**: Each participant recorded on a separate audio track
 - **Automatic Recording**: Optional auto-start when meetings begin

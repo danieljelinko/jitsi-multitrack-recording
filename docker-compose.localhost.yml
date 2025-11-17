@@ -1,0 +1,20 @@
+version: '3.8'
+
+# Localhost Testing Configuration
+# This compose file extends the base docker-compose.yml with localhost-specific settings
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.localhost.yml up -d
+
+services:
+  web:
+    environment:
+      # Keep HTTPS enabled even for localhost (self-signed cert)
+      - DISABLE_HTTPS=0
+
+  jvb:
+    environment:
+      # Override STUN to prevent external IP discovery
+      - JVB_STUN_SERVERS=
+      # Force localhost addressing
+      - DOCKER_HOST_ADDRESS=127.0.0.1
+      # Disable TCP harvester for simpler localhost testing
+      - JVB_TCP_HARVESTER_DISABLED=true
