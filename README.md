@@ -44,7 +44,25 @@ docker --version
 docker-compose --version
 ```
 
-## 🚀 Quick Start
+## ⚠️ IMPORTANT: First Time Setup
+
+**This repository requires building custom JVB and Jicofo components before first use.**
+
+The build artifacts (`docker/jvb/` and `docker/jicofo/`) are **NOT** included in the repository due to size. You must build them yourself following the instructions in [02_SETUP_CUSTOM_CONTAINERS_HOWTO.md](02_SETUP_CUSTOM_CONTAINERS_HOWTO.md).
+
+**Quick setup summary**:
+1. Clone required source repos: `jitsi-videobridge` and `jicofo`
+2. Build with Maven: `mvn clean package -DskipTests`
+3. Extract and copy artifacts to `docker/jvb/` and `docker/jicofo/`
+4. Generate passwords with `./scripts/generate-passwords.sh`
+5. Build Docker images: `docker-compose build`
+6. Start: `docker-compose up -d`
+
+See [CRITICAL_FIXES.md](CRITICAL_FIXES.md) for detailed setup checklist.
+
+---
+
+## 🚀 Quick Start (After Build Setup)
 
 ### 1. Clone the Repository
 
@@ -53,7 +71,18 @@ git clone https://github.com/your-org/jitsi-multitrack-recording.git
 cd jitsi-multitrack-recording
 ```
 
-### 2. Generate Configuration
+### 2. Build Custom Components
+
+**REQUIRED FOR FIRST TIME SETUP** - See [02_SETUP_CUSTOM_CONTAINERS_HOWTO.md](02_SETUP_CUSTOM_CONTAINERS_HOWTO.md)
+
+```bash
+# Summary (full instructions in link above):
+# 1. Clone jitsi-videobridge and jicofo repos
+# 2. Build with Maven
+# 3. Extract and copy build artifacts
+```
+
+### 3. Generate Configuration
 
 Run the setup script to generate secure passwords and create the `.env` file:
 
@@ -62,13 +91,17 @@ Run the setup script to generate secure passwords and create the `.env` file:
 ```
 
 You'll be prompted to:
-- Set your PUBLIC_URL (default: `http://localhost:8000`)
+- Set your PUBLIC_URL (default: `localhost:8443` for HTTPS, `localhost:8000` for HTTP)
 - Enable/disable automatic recording
 
-### 3. Start the Server
+### 4. Build and Start the Server
 
 ```bash
-./scripts/start-server.sh
+# Build custom Docker images
+docker-compose build
+
+# Start all services
+docker-compose up -d
 ```
 
 The server will start all Jitsi components:
@@ -128,7 +161,7 @@ Key configuration options in `.env`:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `PUBLIC_URL` | `http://localhost:8000` | Public URL for accessing Jitsi |
+| `PUBLIC_URL` | `localhost:8000` | Public URL (without http://) |
 | `HTTP_PORT` | `8000` | HTTP port for web interface |
 | `HTTPS_PORT` | `8443` | HTTPS port (if SSL enabled) |
 | `JVB_PORT` | `10000` | UDP port for media (must be open) |

@@ -22,6 +22,20 @@ config/**/*.log
 config/**/*.pid
 config/**/*.lock
 
+# Ignore runtime-generated configuration files
+config/web/config.js
+config/web/interface_config.js
+config/web/keys/
+config/prosody/prosody.cfg.lua
+config/prosody/certs/
+config/prosody/conf.d/
+config/prosody/rules.d/
+config/prosody/saslauthd.conf
+config/jicofo/jicofo.conf
+config/jicofo/logging.properties
+config/jvb/jvb.conf
+config/jvb/logging.properties
+
 # But keep our template files
 !config/jvb/sip-communicator.properties
 !config/**/.gitkeep
@@ -61,6 +75,11 @@ Desktop.ini
 
 # Docker
 .docker/
+
+# Build artifacts (users must build these themselves)
+docker/jvb/
+docker/jicofo/
+docker/recorder/
 
 # Test files
 test-recordings/

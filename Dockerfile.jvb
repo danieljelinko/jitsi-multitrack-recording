@@ -1,4 +1,8 @@
 FROM jitsi/jvb:stable-9584
 
-# Replace the stock videobridge binary with the locally built multitrack-enabled jar.
+# Remove old libraries to avoid classpath conflicts
+RUN rm -rf /usr/share/jitsi-videobridge/lib/*
+
+# Copy the locally built multitrack-enabled videobridge and all its dependencies
 COPY docker/jvb/jitsi-videobridge.jar /usr/share/jitsi-videobridge/jitsi-videobridge.jar
+COPY docker/jvb/lib/ /usr/share/jitsi-videobridge/lib/

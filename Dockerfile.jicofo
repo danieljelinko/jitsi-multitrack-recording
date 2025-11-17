@@ -1,4 +1,7 @@
 FROM jitsi/jicofo:stable-9584
 
-# Replace the bundled jicofo jar with the locally built one that understands colibri2 connects.
+# Replace the bundled jicofo jar with the locally built one that understands colibri2 connects
 COPY docker/jicofo/jicofo.jar /usr/share/jicofo/jicofo.jar
+
+# Comment out the trusted-domains line that causes XmppStringprepException with empty strings
+RUN sed -i 's/^      trusted-domains/      # trusted-domains/g' /defaults/jicofo.conf

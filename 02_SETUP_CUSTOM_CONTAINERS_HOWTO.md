@@ -32,17 +32,23 @@ cd ~/Work/guess-class/jitsi-videobridge
 mvn clean package -DskipTests
 ```
 
-The jar we need lands here:
-`jvb/target/jitsi-videobridge-2.3-SNAPSHOT.jar`
+The build creates both a jar and a distribution archive with all dependencies:
+- `jvb/target/jitsi-videobridge-2.3-SNAPSHOT.jar` (main jar)
+- `jvb/target/jitsi-videobridge-2.3-SNAPSHOT-archive.zip` (distribution with dependencies)
 
-Copy it into the multitrack repo so Docker can use it:
+Extract the distribution and copy it into the multitrack repo:
 
 ```bash
+cd ~/Work/guess-class/jitsi-videobridge/jvb/target
+unzip -q jitsi-videobridge-2.3-SNAPSHOT-archive.zip
+
 cd ~/Work/guess-class/jitsi-multitrack-recording
+rm -rf docker/jvb/*
 mkdir -p docker/jvb
-cp ~/Work/guess-class/jitsi-videobridge/jvb/target/jitsi-videobridge-2.3-SNAPSHOT.jar \
-   docker/jvb/jitsi-videobridge.jar
+cp -r ~/Work/guess-class/jitsi-videobridge/jvb/target/jitsi-videobridge-2.3-SNAPSHOT/* docker/jvb/
 ```
+
+**Important**: You must copy the entire distribution (jar + lib directory) to avoid classpath conflicts with the base image's older libraries.
 
 ---
 
